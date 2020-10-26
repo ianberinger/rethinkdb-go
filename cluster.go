@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"sort"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -253,9 +252,6 @@ func (c *Cluster) listenForNodeChanges() error {
 		OldVal *nodeStatus `rethinkdb:"old_val"`
 	}
 	for cursor.Next(&result) {
-		addr := fmt.Sprintf("%s:%d", result.NewVal.Network.Hostname, result.NewVal.Network.ReqlPort)
-		addr = strings.ToLower(addr)
-
 		if result.NewVal != nil && result.OldVal == nil {
 			// added new node
 			if !c.nodeExists(result.NewVal.ID) {
